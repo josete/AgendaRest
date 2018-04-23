@@ -5,6 +5,8 @@
  */
 package recursos;
 
+import clases.AgendaObjeto;
+import clases.PersonaObjeto;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,11 +14,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
+import metodos.ImportarExportar;
 
 /**
  * REST Web Service
@@ -42,46 +46,9 @@ public class Agenda {
      */
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public String getXml() {
-        String xml = "";
-        File agenda = new File("agenda.xml");
-        FileReader fr = null;
-        BufferedReader br = null;
-        try {
-            fr = new FileReader(agenda);
-            br = new BufferedReader(fr);
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                xml += linea;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != fr) {
-                    fr.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-
-        return xml;
-    }
-    
-    @POST
-    @Produces(MediaType.APPLICATION_XML)
-    public void setXml(String xml){
-        
+    public AgendaObjeto getXml() {
+        ImportarExportar i = new ImportarExportar("agenda.xml");
+        return i.cargar();
     }
 
-    /**
-     * PUT method for updating or creating an instance of Agenda
-     *
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public void putXml(String content) {
-    }
 }
