@@ -48,7 +48,7 @@ public class ValidarPersona {
      */
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    public boolean putXml(PersonaObjeto p) {
+    public String putXml(PersonaObjeto p) {
         File schemaFile = new File("validador.xsd");
         if (!schemaFile.exists()) {
             CrearXsd.crear();
@@ -63,13 +63,13 @@ public class ValidarPersona {
             javax.xml.validation.Validator validator = schema.newValidator();
             validator.validate(xmlFile);
             System.out.println(xmlFile.getSystemId() + " is valid");
-            return true;
+            return "true";
         } catch (SAXException e) {
             System.out.println(xmlFile.getSystemId() + " is NOT valid reason:" + e);
-            return false;
+            return "false";
         } catch (IOException ex) {
             Logger.getLogger(ValidarAgenda.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return "false";
     }
 }

@@ -15,6 +15,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
@@ -60,7 +61,7 @@ public class ValidarAgenda {
      */
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    public boolean putXml(AgendaObjeto a) {
+    public String putXml(AgendaObjeto a) {
         File schemaFile = new File("validador.xsd");
         if (!schemaFile.exists()) {
             CrearXsd.crear();
@@ -75,13 +76,13 @@ public class ValidarAgenda {
             javax.xml.validation.Validator validator = schema.newValidator();
             validator.validate(xmlFile);
             System.out.println(xmlFile.getSystemId() + " is valid");
-            return true;
+            return "true";
         } catch (SAXException e) {
             System.out.println(xmlFile.getSystemId() + " is NOT valid reason:" + e);
-            return false;
+            return "false";
         } catch (IOException ex) {
             Logger.getLogger(ValidarAgenda.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return "false";
     }
 }
