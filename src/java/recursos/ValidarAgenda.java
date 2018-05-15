@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
  *
  * @author Portatil
  */
-@Path("validarAgenda")
+@Path("agenda/validar")
 public class ValidarAgenda {
 
     @Context

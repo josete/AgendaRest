@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
  *
  * @author Portatil
  */
-@Path("validarPersona")
+@Path("persona/validar")
 public class ValidarPersona {
 
     @Context

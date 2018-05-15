@@ -5,19 +5,22 @@
  */
 package recursos;
 
-import clases.AgendaObjeto;
+import baseDeDatos.BaseDeDatos;
 import clases.PersonaObjeto;
+import filtros.FiltroAutenticacion;
+import java.util.ArrayList;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import metodos.ImportarExportar;
 
 /**
  * REST Web Service
@@ -42,18 +45,16 @@ public class Persona {
      * @return an instance of java.lang.String
      */
     @GET
-    @Path("{nombre}")
+    @Path("{idAgenda}")
+    @FiltroAutenticacion
     @Produces(MediaType.APPLICATION_XML)
-    public PersonaObjeto getXml(@PathParam("nombre") String nombre) {
-        //TODO return proper representation object
-        ImportarExportar i = new ImportarExportar("agenda.xml");
-        AgendaObjeto a = i.cargar();
-        for (PersonaObjeto p : a.getPersonas()) {
-            if (p.getNombre().equals(nombre)) {
-                return p;
-            }
+    public ArrayList<PersonaObjeto> getXml(@PathParam("idAgenda") String idAgenda,@QueryParam("nombre") String nombre) {
+        if (BaseDeDatos.b == null) {
+            BaseDeDatos ba = new BaseDeDatos();
+            return BaseDeDatos.b.obtenerPersona(nombre,Integer.parseInt(idAgenda));
+        } else {
+            return BaseDeDatos.b.obtenerPersona(nombre,Integer.parseInt(idAgenda));
         }
-        return null;
     }
 
     /**
@@ -62,12 +63,41 @@ public class Persona {
      * @param content representation for the resource
      */
     @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void putXml(@FormParam("nombre") String nombre, @FormParam("email") String email, @FormParam("telefono") String telefono) {
-        ImportarExportar i = new ImportarExportar("agenda.xml");
-        AgendaObjeto a = i.cargar();
-        PersonaObjeto p = new PersonaObjeto(nombre, telefono, email);
-        a.anadirPersona(p);
-        i.guardar(a);
+    @Path("{idAgenda}")
+    @FiltroAutenticacion
+    @Consumes(MediaType.APPLICATION_XML)
+    public void putXml(PersonaObjeto p,@PathParam("idAgenda") String idAgenda) {
+        if (BaseDeDatos.b == null) {
+            BaseDeDatos ba = new BaseDeDatos();
+            BaseDeDatos.b.insertarPersona(p,Integer.parseInt(idAgenda));
+        } else {
+            BaseDeDatos.b.insertarPersona(p,Integer.parseInt(idAgenda));
+        }
+    }
+    
+    @DELETE
+    @Path("{idPersona}")
+    @FiltroAutenticacion
+    @Consumes(MediaType.APPLICATION_XML)
+    public void borrar(@PathParam("idPersona") String idPersona) {
+        if (BaseDeDatos.b == null) {
+            BaseDeDatos ba = new BaseDeDatos();
+            BaseDeDatos.b.borrarPersona(Integer.parseInt(idPersona));
+        } else {
+            BaseDeDatos.b.borrarPersona(Integer.parseInt(idPersona));
+        }
+    }
+    
+    @PUT
+    @Path("{idPersona}")
+    @FiltroAutenticacion
+    @Consumes(MediaType.APPLICATION_XML)
+    public void actualizar(PersonaObjeto p,@PathParam("idPersona") String idPersona) {
+        if (BaseDeDatos.b == null) {
+            BaseDeDatos ba = new BaseDeDatos();
+            BaseDeDatos.b.actualizarPersona(p,Integer.parseInt(idPersona));
+        } else {
+            BaseDeDatos.b.actualizarPersona(p,Integer.parseInt(idPersona));
+        }
     }
 }
