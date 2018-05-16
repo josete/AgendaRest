@@ -32,7 +32,6 @@ public class ApplicationConfig extends Application {
         resources.add(filtros.Autenticacion.class);
         resources.add(recursos.Agenda.class);
         resources.add(recursos.LoginResource.class);
-        resources.add(recursos.ObtenerAgendasResource.class);
         resources.add(recursos.Persona.class);
         resources.add(recursos.RegistroResource.class);
         resources.add(recursos.ValidarAgenda.class);

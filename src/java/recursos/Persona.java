@@ -6,6 +6,7 @@
 package recursos;
 
 import baseDeDatos.BaseDeDatos;
+import clases.AgendaObjeto;
 import clases.PersonaObjeto;
 import filtros.FiltroAutenticacion;
 import java.util.ArrayList;
@@ -48,12 +49,12 @@ public class Persona {
     @Path("{idAgenda}")
     @FiltroAutenticacion
     @Produces(MediaType.APPLICATION_XML)
-    public ArrayList<PersonaObjeto> getXml(@PathParam("idAgenda") String idAgenda,@QueryParam("nombre") String nombre) {
+    public AgendaObjeto getXml(@PathParam("idAgenda") String idAgenda,@QueryParam("nombre") String nombre) {
         if (BaseDeDatos.b == null) {
             BaseDeDatos ba = new BaseDeDatos();
-            return BaseDeDatos.b.obtenerPersona(nombre,Integer.parseInt(idAgenda));
+            return new AgendaObjeto(BaseDeDatos.b.obtenerPersona(nombre,Integer.parseInt(idAgenda)));
         } else {
-            return BaseDeDatos.b.obtenerPersona(nombre,Integer.parseInt(idAgenda));
+            return new AgendaObjeto(BaseDeDatos.b.obtenerPersona(nombre,Integer.parseInt(idAgenda)));
         }
     }
 
@@ -78,7 +79,7 @@ public class Persona {
     @DELETE
     @Path("{idPersona}")
     @FiltroAutenticacion
-    @Consumes(MediaType.APPLICATION_XML)
+    //@Consumes(MediaType.APPLICATION_XML)
     public void borrar(@PathParam("idPersona") String idPersona) {
         if (BaseDeDatos.b == null) {
             BaseDeDatos ba = new BaseDeDatos();
