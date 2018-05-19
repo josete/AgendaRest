@@ -7,6 +7,7 @@ package recursos;
 
 import baseDeDatos.BaseDeDatos;
 import clases.AgendaObjeto;
+import clases.AgendaObjetoConId;
 import clases.PersonaObjeto;
 import filtros.FiltroAutenticacion;
 import java.util.ArrayList;
@@ -58,6 +59,19 @@ public class Persona {
         }
     }
 
+    @GET
+    @Path("{idAgenda}/info")
+    @FiltroAutenticacion
+    @Produces(MediaType.APPLICATION_XML)
+    public AgendaObjetoConId getInfo(@PathParam("idAgenda") String idAgenda) {
+        if (BaseDeDatos.b == null) {
+            BaseDeDatos ba = new BaseDeDatos();
+            return BaseDeDatos.b.obtenerAgendaConIds(Integer.parseInt(idAgenda));
+        } else {
+            return BaseDeDatos.b.obtenerAgendaConIds(Integer.parseInt(idAgenda));
+        }
+    }
+    
     /**
      * PUT method for updating or creating an instance of Persona
      *

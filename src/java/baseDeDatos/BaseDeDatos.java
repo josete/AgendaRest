@@ -6,7 +6,9 @@
 package baseDeDatos;
 
 import clases.AgendaObjeto;
+import clases.AgendaObjetoConId;
 import clases.PersonaObjeto;
+import clases.PersonaObjetoConId;
 import clases.Usuario;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -126,6 +128,25 @@ public class BaseDeDatos {
                 personas.add(new PersonaObjeto(resultSet.getString("nombre"), resultSet.getString("telefono"), resultSet.getString("email")));
             }
             return new AgendaObjeto(personas);
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cerrarConexiones();
+        }
+        return null;
+    }
+    
+    public AgendaObjetoConId obtenerAgendaConIds(int id) {
+        try {
+            String sentencia = "select * from contactos where idAgenda = " + id;
+            c = dataSource.getConnection();
+            statement = c.createStatement();
+            resultSet = statement.executeQuery(sentencia);
+            ArrayList<PersonaObjetoConId> personas = new ArrayList<>();
+            while(resultSet.next()){
+                personas.add(new PersonaObjetoConId(resultSet.getString("nombre"), resultSet.getString("telefono"), resultSet.getString("email"),resultSet.getInt("id")));
+            }
+            return new AgendaObjetoConId(personas);
         } catch (SQLException ex) {
             Logger.getLogger(BaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
